@@ -1,0 +1,18 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+require('dotenv').config();
+const { sequelize } = require('./models');
+const authRoutes = require('./routes/auth');
+const storeRoutes = require('./routes/stores');
+const adminRoutes = require('./routes/admin');
+const ownerRoutes = require('./routes/owner');
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+app.use('/api/auth', authRoutes);
+app.use('/api/stores', storeRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/owner', ownerRoutes);
+const PORT = process.env.PORT || 4000;
+sequelize.sync({ alter: true }).then(()=>{ app.listen(PORT, ()=>console.log(`Server running on ${PORT}`)); });
